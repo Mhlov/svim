@@ -10,13 +10,30 @@ Wrapper for a vim server
 sudo apt-get install perl
 ```
 
-## USAGE
+## Usage
 
 svim.pl [options] [server name] [vim arguments]
 
 ### Options
 
-* -t - Run vim server in a new terminal window
+* -t - Run a vim server in a new terminal window
+
+### Examples
+
+```
+svim.pl FOO hello-world
+```
+Run FOO vim server and edit 'hello-world' file.
+
+```
+svim.pl -t BAR
+```
+Run BAR vim server.
+
+```
+svim.pl BAR "+call cursor(34,1)" baz.md
+```
+Edit file `baz.md` in BAR vim server and position the cursor in the 34 line.
 
 ## aliases in .zshrc
 
@@ -43,7 +60,7 @@ Handling desktop files for vim servers
 
 ![screenshot01](screen01.png)
 
-## USAGE
+## Usage
 
 Add the following lines to your .vimrc:
 

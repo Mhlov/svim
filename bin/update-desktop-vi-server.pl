@@ -6,9 +6,10 @@
 #
 #       AUTHOR: ΜΗΛΟΝ
 #      CREATED: 01-11-2020 07:46
+#      LICENSE: Artistic License 1.0
 #===============================================================================
 
-#
+# USAGE
 # Add the following lines to your .vimrc:
 #
 #   if has("autocmd")
@@ -16,7 +17,7 @@
 #       autocmd VimLeave * !update-desktop-vi-server.pl 1
 #   endif
 
-use Modern::Perl '2018';
+use v5.10;
 use utf8;
 use strict;
 use autodie;
@@ -28,26 +29,10 @@ use open      qw/:std :utf8/;
 use charnames qw/:full/;
 use feature   qw/unicode_strings/;
 
-#use lib "$ENV{HOME}/lib";
-
-use Term::ANSIColor qw(:constants);
-
-use Getopt::Long qw/:config posix_default gnu_getopt no_ignore_case/;
-
-use List::Util qw/any/;        # https://perldoc.perl.org/List/Util.html
-
-# OOP
-#use Method::Signatures;        # https://metacpan.org/pod/Method::Signatures
-#use Object::InsideOut;         # https://metacpan.org/pod/Object::InsideOut
-#use Object::Result;            # https://metacpan.org/pod/Object::Result
-
-# DEBUGGING
-#use diagnostics;
-use Carp;                       # 'carp' for warn, 'croak' for die
-                                # https://perldoc.perl.org/Carp.html
-
-use Data::Printer;              # Usage: p @array;
+#use Data::Printer;              # Usage: p @array;
                                 # https://metacpan.org/pod/Data::Printer
+
+use POSIX;
 
 my $version = '0.1';
 
@@ -56,8 +41,6 @@ my $f_prefix = 'svim-';
 
 my @servers;
 
-
-use POSIX;
 
 sub daemonize
 {
@@ -119,9 +102,7 @@ sub update_files {
         next unless $f_prefix eq substr $file, 0, $f_prefix_length;
         my($f_server) = $file =~ /^${f_prefix}(.+)\.desktop$/;
 
-        #say "$file : $f_server";
-
-        unless ( any { $_ eq $f_server } @servers ) {
+        unless ( scalar grep { $_ eq $f_server } @servers ) {
             unlink "$desktop_dir/$file" or die $!;
             $update = 1;
         }

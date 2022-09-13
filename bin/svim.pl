@@ -6,8 +6,9 @@
 #
 #       AUTHOR: ΜΗΛΟΝ
 #      CREATED: 09-04-2020 12:15
+#      LICENSE: Artistic License 1.0
 #===============================================================================
-use Modern::Perl            '2018';
+use v5.10;
 use strict;
 use warnings;
 use utf8;
