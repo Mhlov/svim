@@ -1,6 +1,6 @@
 # svim
 
-Wrapper for a vim server
+Wrapper for vim server
 
 ## Dependecies
 
@@ -12,11 +12,14 @@ sudo apt-get install perl
 
 ## Usage
 
-svim.pl [options] [server name] [vim arguments]
+svim.pl [options] server name [vim arguments]
+svim.pl +A|+a [vim arguments]
 
 ### Options
 
-* -t - Run a vim server in a new terminal window
+* +t - Run vim server in a new terminal window
+* +a - Select a server from a list
+* +A - Similar to "+a", but if there is only one server, it will be selected.
 
 ### Examples
 
@@ -26,14 +29,19 @@ svim.pl FOO hello-world
 Run FOO vim server and edit 'hello-world' file.
 
 ```
-svim.pl -t BAR
+svim.pl +t BAR
 ```
-Run BAR vim server.
+Run BAR vim server in a new terminal window.
 
 ```
 svim.pl BAR "+call cursor(34,1)" baz.md
 ```
 Edit file `baz.md` in BAR vim server and position the cursor in the 34 line.
+
+```
+svim.pl +A qux.pl
+```
+Ask to select on which server (FOO or BAR) open 'qux.pl' file.
 
 ## aliases in .zshrc
 
@@ -43,8 +51,11 @@ alias svimls='svils'
 
 alias svi='svim.pl'
 alias svim='svi'
-alias wsvi='svim -t'
+alias wsvi='svim +t'
 alias wsvim='wsvi'
+
+alias savi='svim +A'
+alias savim='savi'
 
 alias tsvi='tmux new-window svim.pl'
 alias tvsvi='tmux split-window svim.pl'
