@@ -12,8 +12,10 @@ sudo apt-get install perl
 
 ## Usage
 
+```
 svim.pl [options] server name [vim arguments]
 svim.pl +A|+a [vim arguments]
+```
 
 ### Options
 
