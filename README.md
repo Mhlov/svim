@@ -79,7 +79,7 @@ Add the following lines to your .vimrc:
 
 ```
 if has("autocmd")
-    autocmd VimEnter * silent! !update-desktop-vi-server.pl&
+    autocmd VimEnter * silent execute "!update-desktop-vi-server.pl&" | redraw!
     autocmd VimLeave * !update-desktop-vi-server.pl 1
 endif
 ```
