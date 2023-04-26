@@ -17,7 +17,7 @@ use open qw/:std :utf8/;
 use Fcntl qw/:flock/;
 use Time::HiRes qw/ usleep /;
 
-use DDP;
+#use DDP;
 
 my $VERSION = '0.23';
 
