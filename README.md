@@ -2,7 +2,7 @@
 
 Wrapper for vim server
 
-## Dependecies
+## Dependencies
 
 * perl
 
@@ -15,35 +15,56 @@ sudo apt-get install perl
 ```
 svim.pl [options] server name [vim arguments]
 svim.pl +A|+a [vim arguments]
+svim.pl
 ```
 
 ### Options
 
-* +t - Run vim server in a new terminal window
-* +a - Select a server from a list
-* +A - Similar to "+a", but if there is only one server, it will be selected.
+* +t - Run a vim server in a new terminal window.
+* +T - Run a vim server in a new tmux window.
+* +h - Split a tmux window horizontally and run a vim server.
+* +v - Split a tmux window vertically and run a vim server.
+* +a - Select a server from a list.
+* +A - Similar to "+a" but if there is only one server then it will be selected.
+
+### Environment
+
+#### TERM_BIN, TERMINAL
+You can determine which terminal emulator will be used by setting one of these
+environment variables. The default is '/usr/bin/x-terminal-emulator'.
+
+#### TMUX_BIN
+You can point to where the tmux binary is located by setting this environment
+variable. The default if '/usr/bin/tmux'.
 
 ### Examples
 
 ```
 svim.pl FOO hello-world
 ```
-Run FOO vim server and edit 'hello-world' file.
+Run the FOO vim server and edit 'hello-world' file on it.
 
 ```
 svim.pl +t BAR
 ```
-Run BAR vim server in a new terminal window.
+Run the BAR vim server in a new terminal window.
 
 ```
 svim.pl BAR "+call cursor(34,1)" baz.md
 ```
-Edit file `baz.md` in BAR vim server and position the cursor in the 34 line.
+Edit file `baz.md` on BAR vim server and position the cursor on line 34.
 
 ```
 svim.pl +A qux.pl
 ```
-Ask to select on which server (FOO or BAR) open 'qux.pl' file.
+Ask to select on which server (FOO or BAR) edit the file 'qux.pl'.
+
+## zsh completion
+
+```
+mkdir -p ~/.zsh/functions
+cp zsh-completion/_svim.pl ~/.zsh/functions/
+```
 
 ## aliases in .zshrc
 
@@ -53,15 +74,16 @@ alias svimls='svils'
 
 alias svi='svim.pl'
 alias svim='svi'
+
 alias wsvi='svim +t'
 alias wsvim='wsvi'
 
 alias savi='svim +A'
 alias savim='savi'
 
-alias tsvi='tmux new-window svim.pl'
-alias tvsvi='tmux split-window svim.pl'
-alias thsvi='tmux split-window -h svim.pl'
+alias tsvi='svim.pl +T'
+alias tvsvi='svim.pl +v'
+alias thsvi='svim.pl +h'
 alias tsvim='tsvi'
 alias tvsvim='tvsvi'
 alias thsvim='thsvi'

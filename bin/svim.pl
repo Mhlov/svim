@@ -19,7 +19,7 @@ use Time::HiRes qw/ usleep /;
 
 #use DDP;
 
-my $VERSION = '0.23';
+my $VERSION = '0.24';
 
 my $vim_bin = '/usr/bin/vim';
 
@@ -28,19 +28,26 @@ my $lock_file = '/var/lock/svim.lock';
 my $server;             # server name
 my $run_in_term;        # flag 'run in a new terminal window'
 my $ask;
+my $run_in_tmux;
 
 # terminal emulator
-my $term_bin = $ENV{TERMINAL} || '/usr/bin/x-terminal-emulator';
+my $term_bin =
+    $ENV{TERM_BIN} || $ENV{TERMINAL} || '/usr/bin/x-terminal-emulator';
+
+my $tmux_bin = $ENV{TMUX_BIN} || '/usr/bin/tmux';
 
 sub help {
     require Pod::Usage;
-    Pod::Usage::pod2usage(-verbose => 99);
+    Pod::Usage::pod2usage(-verbose => 99, -exitval => 'NOEXIT');
 }
 
 sub options {
     while (my $opt = shift) {
-        if ($opt =~ /^\+[taA]+$/) {
+        if ($opt =~ /^\+[tTvhaA]+$/) {
             $run_in_term = 1    if $opt =~ /t/;
+            $run_in_tmux = 'w'  if $opt =~ /T/;
+            $run_in_tmux = 'h'  if $opt =~ /h/;
+            $run_in_tmux = 'v'  if $opt =~ /v/;
             $ask = 1            if $opt =~ /a/;
             $ask = 'auto'       if $opt =~ /A/;
         }
@@ -59,6 +66,17 @@ sub options {
 
 sub get_term_cmd {
     return $term_bin, '-name', "Vim_$server", '-e';
+}
+
+sub get_tmux_cmd {
+    if ($run_in_tmux eq 'h') {
+        return $tmux_bin, 'split-window', '-h';
+    }
+    elsif ($run_in_tmux eq 'v') {
+        return $tmux_bin, 'split-window';
+    } else {
+        return $tmux_bin, 'new-window';
+    }
 }
 
 sub get_vim_cmd {
@@ -142,7 +160,11 @@ sub main {
         # run a new server
         if ($run_in_term) {
             exec get_term_cmd(), get_vim_cmd(), @_;
-        } else {
+        }
+        elsif ($run_in_tmux) {
+            exec get_tmux_cmd(), get_vim_cmd(), @_;
+        }
+        else {
             exec get_vim_cmd(), @_;
         }
     }
@@ -165,13 +187,27 @@ B<svim.pl> [options] server_name [vim arguments]
 
 B<svim.pl> +A|+a [vim arguments]
 
+B<svim.pl>
+
 =head1 OPTIONS
 
-=over 14
+=over 6
 
 =item B<< +t >>
 
-Run vim server in a new terminal window.
+Run a vim server in a new terminal window.
+
+=item B<< +T >>
+
+Run a vim server in a new tmux window.
+
+=item B<< +h >>
+
+Split a tmux window horizontally and run a vim server.
+
+=item B<< +v >>
+
+Split a tmux window vertically and run a vim server.
 
 =item B<< +a >>
 
@@ -179,14 +215,25 @@ Select a server from a list.
 
 =item B<< +A >>
 
-Similar to B<<+a>> but if there is only one server, it will be selected.
+Similar to B<<+a>> but if there is only one server then it will be selected.
 
 =back
 
-=head1 NOTES
+=head1 ENVIRONMENT
 
-You can determine which terminal emulator will be used by setting the
-envirounment variable $TERMINAL. The default is '/usr/bin/x-terminal-emulator'.
+=over 6
+
+=item TERM_BIN, TERMINAL
+
+You can determine which terminal emulator will be used by setting one of these
+environment variables. The default is '/usr/bin/x-terminal-emulator'.
+
+=item TMUX_BIN
+
+You can point to where the tmux binary is located by setting this environment
+variable. The default if '/usr/bin/tmux'.
+
+=back
 
 =cut
 
