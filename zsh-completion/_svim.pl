@@ -16,7 +16,7 @@ case $state in
                 '+h[Split a tmux window horizontally and run a vim server.]' \
                 '+v[Split a tmux window vertically and run a vim server.]' \
                 '+a[Select a server from a list]' \
-                '+A[Similar to <+a> but if there is only one server, it will be selected]'
+                '+A[Similar to <+a> but if there is only one server then it will be selected and if there are no servers, a server named <A> is started.]'
         else
             _alternative \
                 "servers:vim servers:($(vim --serverlist))"

@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #===============================================================================
-#  DESCRIPTION: Wrapper for a vim server
+#  DESCRIPTION: Wrapper for vim servers
 #
 #         TODO: 
 #
@@ -110,6 +110,9 @@ sub ask_server_name {
     if ($ask eq 'auto' and @$serverlist == 1) {
         $name = $serverlist->[0];
     }
+    elsif ($ask eq 'auto' and @$serverlist == 0) {
+        $name = 'A';
+    }
     elsif (@$serverlist) {
         print "Type a number of a server and press return.\n";
         for my $i (0 .. $#{ $serverlist }) {
@@ -179,7 +182,7 @@ __END__
 
 =head1 NAME
 
-svim.pl - Wrapper for a vim server
+svim.pl - Wrapper for vim servers
 
 =head1 SYNOPSIS
 
@@ -215,7 +218,8 @@ Select a server from a list.
 
 =item B<< +A >>
 
-Similar to B<<+a>> but if there is only one server then it will be selected.
+Similar to B<<+a>> but if there is only one server then it will be selected
+and if there are no servers, a server named <A> is started.
 
 =back
 
@@ -231,7 +235,7 @@ environment variables. The default is '/usr/bin/x-terminal-emulator'.
 =item TMUX_BIN
 
 You can point to where the tmux binary is located by setting this environment
-variable. The default if '/usr/bin/tmux'.
+variable. The default is '/usr/bin/tmux'.
 
 =back
 

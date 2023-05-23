@@ -1,6 +1,6 @@
 # svim
 
-Wrapper for vim server
+Wrapper for vim servers
 
 ## Dependencies
 
@@ -25,7 +25,8 @@ svim.pl
 * +h - Split a tmux window horizontally and run a vim server.
 * +v - Split a tmux window vertically and run a vim server.
 * +a - Select a server from a list.
-* +A - Similar to "+a" but if there is only one server then it will be selected.
+* +A - Similar to <+a> but if there is only one server then it will be
+selected and if there are no servers, a server named <A> is started.
 
 ### Environment
 
@@ -35,7 +36,7 @@ environment variables. The default is '/usr/bin/x-terminal-emulator'.
 
 #### TMUX_BIN
 You can point to where the tmux binary is located by setting this environment
-variable. The default if '/usr/bin/tmux'.
+variable. The default is '/usr/bin/tmux'.
 
 ### Examples
 
